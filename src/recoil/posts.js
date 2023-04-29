@@ -10,11 +10,6 @@ import {
 } from "firebase/firestore";
 import { postsCollection, db } from "../fireBase";
 
-export const postsState = atom({
-  key: "postsState",
-  default: [],
-});
-
 export const getPosts = selector({
   key: "getPosts",
   get: async ({ get }) => {
@@ -80,6 +75,21 @@ export const useUpdatePost = () => {
   return updatePostMutation.mutateAsync;
 };
 
+export const postsState = atom({
+  key: "postsState",
+  default: getPosts,
+});
+
 export const usePostsQuery = () => {
-  return useQuery("posts", () => getPosts());
+  return useQuery("posts", async () => {
+    const querySnapshot = await postsCollection.get();
+    const newPosts = [];
+    querySnapshot.forEach((doc) => {
+      newPosts.push({
+        id: doc.id,
+        data: doc.data(),
+      });
+    });
+    return newPosts;
+  });
 };

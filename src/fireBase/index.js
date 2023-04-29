@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import firebase from "firebase/app";
-import "firebase/firestore";
+import { firestore } from "firebase/firestore";
+import { getFirestore, collection } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBwvbtYB1aFvsPR6ulpDmjXwK_CqSJG7KY",
@@ -18,8 +18,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
-const db = firebase.firestore();
-const postsCollection = db.collection("posts");
-const tagsCollection = db.collection("tags");
+const db = getFirestore(app);
+const postsCollection = collection(db, "posts");
+const tagsCollection = collection(db, "tags");
 
 export { db, postsCollection, tagsCollection };
